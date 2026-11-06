@@ -19,10 +19,10 @@ Para cualquier tarea de diseño o frontend se usa el agente `design-director` (`
 | Tarea | Skills (en orden) |
 |---|---|
 | Spec de una feature nueva o ambigua | `spec-driven-development` |
-| Landing, marketing, página pública, hero | `design-taste-frontend` → `frontend-design` → `impeccable` (audit) |
-| Sitio inmersivo, 3D, scroll narrativo (R3F, GSAP, Lenis) | `web-inmersiva` (manda) + `frontend-lead` (reglas de motion/3D/perf) |
+| Landing, marketing, página pública, hero | `design-taste-frontend` → `impeccable` (audit) |
+| Sitio inmersivo, 3D, scroll narrativo (R3F, GSAP, Lenis) | `web-inmersiva` |
 | Dashboard, admin, pantallas de app, formularios | `ui-ux-pro-max` → `impeccable` |
-| Hace falta una referencia visual antes de codear | `imagegen-frontend-web` (o `imagegen-frontend-mobile`) → `image-to-code` |
+| Hace falta una referencia visual antes de codear | `imagegen-frontend-web` |
 | Identidad, logo, brand board | `brandkit` |
 | Pulido, microinteracciones, animación de UI | `emil-design-eng` |
 | Crítica, auditoría, "se ve genérico", accesibilidad | `impeccable` |
@@ -31,10 +31,6 @@ Para cualquier tarea de diseño o frontend se usa el agente `design-director` (`
 | La sesión pierde calidad o cambia de tarea | `context-engineering` |
 
 **Al cerrar cualquier tarea de UI:** una pasada de `impeccable` (audit) y, si es React, `vercel-react-best-practices`. Después, los tests y el lint que pida el proyecto.
-
-### Skills opt-in (solo si se nombran)
-
-`design-taste-frontend-v1`, `design-taste-frontend-v2-experimental`, `gpt-taste`, `stitch-design-taste`, `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui`. No se eligen solas: el usuario las pide por nombre o elige ese estilo.
 
 ### Conflictos entre skills
 

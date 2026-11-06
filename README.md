@@ -9,7 +9,7 @@ design-studio/
 ├── CLAUDE.md                     reglas del hub + tabla de ruteo de skills
 ├── .claude/
 │   ├── agents/design-director.md agente orquestador
-│   └── skills/                   22 skills (diseño, frontend, specs, docs)
+│   └── skills/                   11 skills (diseño, frontend, specs, docs)
 └── repository/                   acá van los proyectos (ignorado por el git del hub)
 ```
 
@@ -37,11 +37,9 @@ Para sacar un worktree cuando terminás: `git worktree remove repository/SmartLo
 
 ## Skills incluidas
 
-- **Dirección de arte:** `design-taste-frontend`, `frontend-design`
+- **Dirección de arte:** `design-taste-frontend`
 - **Sistema UI/UX y auditoría:** `ui-ux-pro-max`, `impeccable`, `emil-design-eng`
-- **Inmersivo / 3D:** `web-inmersiva`, `frontend-lead`
-- **Imagen → código:** `imagegen-frontend-web`, `imagegen-frontend-mobile`, `image-to-code`, `brandkit`
+- **Inmersivo / 3D:** `web-inmersiva`
+- **Imagen e identidad:** `imagegen-frontend-web`, `brandkit`
 - **Ingeniería:** `vercel-react-best-practices`, `spec-driven-development`, `documentation-and-adrs`, `context-engineering`
-- **Opt-in (solo por nombre):** `design-taste-frontend-v1`, `design-taste-frontend-v2-experimental`, `gpt-taste`, `stitch-design-taste`, `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui`
-
 Origen: `web-inmersiva` viene del perfil de claude.ai y el resto de `SmartLot/.claude/skills`. Son copias: si se actualizan en el origen, hay que volver a copiarlas.

@@ -15,7 +15,6 @@ Sos el director de diseño del hub `design-studio`. No sos un especialista: tu t
 
 - Cargá cada skill con la herramienta Skill, en el orden de la tabla. La primera manda en estilo y estructura. Las siguientes suman criterio sin contradecirla.
 - Si la tarea mezcla tipos (por ejemplo, una landing con una escena 3D), usá la unión de las filas. `web-inmersiva` manda en todo lo de 3D, scroll y motion.
-- Las skills opt-in (`design-taste-frontend-v1`, `design-taste-frontend-v2-experimental`, `gpt-taste`, `stitch-design-taste`, `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui`) se usan solo si el usuario las nombra.
 - Si una feature es nueva, ambigua o grande, primero va `spec-driven-development` y se espera aprobación.
 - Todo archivo que crees o edites va dentro de `repository/<proyecto>`.
 

@@ -498,6 +498,8 @@ Sirve para mostrar el sitio en una charla o una demo:
   - Para revelar rutas se usa `setDrawRange` o el `dashOffset` de `<Line>`.
   - `<Text>` de drei es decorativo: el texto real está en el HTML.
   - Todo lo que se mueve lee `rig.fx` en `useFrame` y se muta por ref.
+  - `OrbitControls`, `AxesHelper`, `GridHelper` y `CameraHelper` son de desarrollo: no llegan a producción (en un sitio de scroll, la cámara la maneja `rig`).
+  - `<Html>` de drei solo para etiquetas pegadas a un punto del espacio. El contenido de lectura va en la capa DOM.
 
 **Partículas sobre una ruta (patrón):**
 ```tsx
@@ -526,6 +528,46 @@ export function FlowAlong({ points, count = 40, speed = 0.08, color, visibility 
 }
 ```
 
+**Shaders propios (solo si el efecto es la idea de la sección):**
+
+Primero se prueba con un material de three o de drei. Un shader propio se justifica cuando el efecto cuenta algo: disolver, revelar o deformar una superficie.
+
+```tsx
+import { shaderMaterial } from "@react-three/drei";
+import { extend, useFrame, type ThreeElement } from "@react-three/fiber";
+import { useRef } from "react";
+import { Color } from "three";
+import { rig } from "../../scroll/rig";
+import fragment from "./shaders/reveal.frag?raw"; // GLSL en archivos aparte (Vite: ?raw)
+import vertex from "./shaders/reveal.vert?raw";
+
+// A nivel de módulo: se compila una vez. Nunca dentro del componente.
+const RevealMaterial = shaderMaterial({ uTime: 0, uReveal: 0, uColor: new Color("#ffffff") }, vertex, fragment);
+extend({ RevealMaterial });
+declare module "@react-three/fiber" {
+  interface ThreeElements { revealMaterial: ThreeElement<typeof RevealMaterial> }
+}
+
+export function RevealPlane() {
+  const mat = useRef<InstanceType<typeof RevealMaterial>>(null);
+  useFrame((state) => {
+    const m = mat.current; if (!m) return;
+    m.uTime = state.clock.elapsedTime; // uniforms por ref, nunca por props ni useState
+    m.uReveal = rig.fx.reveal;          // el estado narrativo viene de rig, como en el resto de las escenas
+  });
+  return (
+    <mesh>
+      <planeGeometry args={[4, 4, 64, 64]} />
+      <revealMaterial ref={mat} transparent />
+    </mesh>
+  );
+}
+```
+- En el fragment se usa matemática (`step`, `mix`, `smoothstep`, `clamp`) en lugar de `if/else`. Hay que guardar en una variable cada lectura de textura que se reutilice y usar los mínimos `varying` necesarios.
+- `ShaderMaterial` ya declara la precisión. `precision mediump float;` hace falta solo en un `RawShaderMaterial`.
+- El estado visible depende de `uReveal` (es decir, de `rig.fx`), no de `uTime`. Así, con reduced motion y `"demand"`, cada sección igual muestra su estado final.
+- R3F descarta solo lo que se declara en JSX. Lo que se crea con `new` (`WebGLRenderTarget`, texturas sueltas) se libera con `.dispose()` en el cleanup de un `useEffect`.
+
 **Modelos externos:**
 1. **Fuentes:** Sketchfab, Poly Pizza o Blender. Cada modelo se registra en `public/models/CREDITS.md` (autor, licencia, URL) y se atribuye si la licencia lo pide.
 2. **Optimización:**
@@ -551,7 +593,7 @@ export function FlowAlong({ points, count = 40, speed = 0.08, color, visibility 
 | FPS | 60 en notebook, ≥ 30 en un celular medio | ≥ 30 |
 | Postprocesado | Bloom + viñeta + tone mapping | ninguno |
 
-Sombras en tiempo real solo si hacen falta (`shadows="percentage"`); si no, luz horneada. `r3f-perf` va solo en desarrollo.
+Sombras en tiempo real solo si hacen falta (`shadows="percentage"`, shadow map de 1024 o 2048, nunca más); si no, luz horneada. Pocas luces en tiempo real: para la luz ambiente conviene un environment map. `<Environment>` de drei va con `files` locales (`public/hdri/`), nunca con `preset`, porque los presets se descargan de un CDN. `r3f-perf` va solo en desarrollo.
 
 ## 10. Movimiento: dos registros que no se mezclan
 
@@ -560,6 +602,14 @@ Sombras en tiempo real solo si hacen falta (`shadows="percentage"`); si no, luz 
 - Los revelados de contenido van de 0.6 a 1.0 s, con `power3.out` o `power4.out`, stagger de 0.08 a 0.12 s entre líneas y `toggleActions: "play none none reverse"`. Es contenido explicativo, por eso puede durar más que la interfaz.
 - Un solo momento orquestado por sección. No se aplica el mismo fade-up a todo, porque es la marca de sitio genérico.
 - El movimiento ambiental es sutil. Nunca se secuestra la rueda ni se fuerza un snapping. El scroll es siempre reversible.
+- En un mismo ScrollTrigger se usa `scrub` **o** `toggleActions`, nunca los dos (si están ambos, gana `scrub`).
+- **Scroll horizontal falso:** el tween horizontal va con `ease: "none"` (si no, el scroll y la posición se desfasan). Lo que se dispara dentro usa `containerAnimation: ese tween` con `start: "left center"`. Con `containerAnimation` no hay pin ni snap, y se anima un hijo, nunca el trigger.
+
+**Efectos de texto (además de SplitText, y como mucho uno por sitio: es el momento audaz o no va):**
+- **Peso de una fuente variable:** `font-variation-settings: "wght" var(--wght, 400)` y se anima `"--wght"` con GSAP (con `scrub` si va ligado al scroll). Lo rasteriza la CPU, así que hay que limitarlo a 10–20 elementos activos a la vez, con stagger.
+- **Texto sobre una curva SVG:** se anima `attr: { startOffset: "100%" }` del `<textPath>` con `scrub` y `ease: "none"`. El `<svg>` lleva `role="img"`, un `<title>` y `aria-label` con el texto completo.
+- **Scramble o máquina de escribir:** `ScrambleTextPlugin` o `TextPlugin` (gratis, igual que todos los plugins), nunca un loop hecho a mano. El texto final real va en un `<span class="sr-only">` y el animado lleva `aria-hidden="true"`, para que el lector de pantalla no lea letras sueltas. Nada de `aria-live="assertive"` en un efecto decorativo.
+- Con reduced motion, ninguno de estos efectos se ejecuta: el texto aparece en su estado final.
 
 **B. Interfaz** (botones, nav, menús, formularios; criterio de Emil Kowalski)
 
@@ -573,7 +623,9 @@ Sombras en tiempo real solo si hacen falta (`shadows="percentage"`); si no, luz 
 | Presionar | `:active { transform: scale(0.97) }` con `transition: transform 160ms var(--ease-out)` |
 | Hover | solo dentro de `@media (hover: hover) and (pointer: fine)` |
 | Asimetría | la salida es más rápida que la entrada |
-| Propiedades | `transform`, `opacity` y `clip-path`. El `blur` animado va por debajo de 20 px |
+| Propiedades | `transform`, `opacity` y `clip-path`, nunca `width`, `height`, `top`, `left` ni `margin`. El `blur` animado va por debajo de 20 px. `will-change` solo en lo que se está animando, no "por las dudas" |
+| Seguir el puntero | `gsap.quickTo` (un tween reutilizado), nunca un `gsap.to` por evento |
+| Animaciones en handlers | Si un tween se crea en un click o en `pointermove`, la función va envuelta en `contextSafe` de `useGSAP`; si no, no se revierte al desmontar |
 | Popovers | `transform-origin` desde el disparador (los modales quedan centrados) |
 
 El salto entre secciones del modo presentación es narrativo (hasta 1.2 s). La tabla B aplica al resto de la interfaz.
@@ -600,6 +652,7 @@ El salto entre secciones del modo presentación es narrativo (hasta 1.2 s). La t
 - [ ] Canvas con `aria-hidden` y cada figura descrita en el HTML.
 - [ ] Contraste de 4.5:1 en el texto y de 3:1 en el foco y los íconos. El color nunca es el único portador de significado.
 - [ ] Gráficos: SVG con `<title>` y una tabla equivalente.
+- [ ] 3D interactivo (si existe): cada objeto clickeable tiene un equivalente en HTML con foco de teclado. El `.stage` sigue con `pointer-events: none`, salvo en la zona interactiva.
 - [ ] Áreas táctiles de 44×44 px y viewport sin bloquear el zoom.
 - [ ] El sitio se entiende y la CTA funciona con todo el movimiento apagado.
 
@@ -630,7 +683,9 @@ El salto entre secciones del modo presentación es narrativo (hasta 1.2 s). La t
   - No se crean objetos de three ni se hace `setState`.
   - Se usa `delta` y `state.clock.elapsedTime`, no `getElapsedTime()`.
 - **Escenas inactivas:** si su `fx` está en 0, `visible = false`.
-- **Recálculo de ScrollTrigger:** `ScrollTrigger.refresh()` solo después de cambios de layout reales (fuentes con `document.fonts.ready`, imágenes sin dimensiones).
+- **Recálculo de ScrollTrigger:** `ScrollTrigger.refresh()` solo después de cambios de layout reales (fuentes con `document.fonts.ready`, imágenes sin dimensiones). Los triggers se crean en el orden de la página, de arriba abajo. Si se crean de forma asíncrona o desordenada, cada uno lleva `refreshPriority` (la primera sección, el número más bajo).
+- **Una sola instancia de Lenis:** se crea en `App` y nunca por componente. Con un modal o un menú a pantalla completa abierto, `lenis.stop()`, y al cerrar, `lenis.start()`.
+- **Rutas (SPA con varias páginas):** al salir de una ruta se desmonta su Canvas y `useGSAP` revierte sus ScrollTriggers. Ni el Canvas ni el loop siguen corriendo en segundo plano.
 - **Bundle:** si `index-*.js` supera los 150 KB gzip, algo de la capa DOM importa three (regla de oro 4).
 - **Warning conocido:** `THREE.Clock: This module has been deprecated` sale de adentro de R3F 9.8 y se ignora.
 
@@ -653,6 +708,12 @@ El salto entre secciones del modo presentación es narrativo (hasta 1.2 s). La t
 | Hero que espera el 3D o una animación para mostrar el título | LCP malo y la CTA no aparece | Hero en HTML desde el primer render |
 | Métricas, testimonios o logos inventados | Engañan al visitante | `TODO(contenido)` y preguntar |
 | Lenis y ScrollSmoother juntos, o Motion "para una cosa" | Dos sistemas compitiendo | Solo Lenis + GSAP |
+| `frameloop="never"` + `advance()` desde el loop de Lenis | Patrón de otras guías: duplica el loop y rompe el render de EffectComposer | `gsap.ticker` mueve Lenis y R3F renderiza solo (sección 7) |
+| `scrollTrigger` en un tween hijo de un timeline | ScrollTrigger solo funciona en animaciones de nivel superior | Ponerlo en el timeline o en un tween suelto |
+| `markers: true` en producción | Quedan marcas en pantalla | Solo en desarrollo |
+| `shaderMaterial` creado dentro del componente | Recompila el shader en cada render | Definirlo y hacer `extend` a nivel de módulo |
+| Uniforms por props o `useState` | Un re-render de React por frame | Mutar por ref en `useFrame` |
+| `<Environment preset="...">` | Descarga el HDRI de un CDN | `files` con un HDRI local |
 
 ## 15. Verificación (antes de decir "listo")
 
