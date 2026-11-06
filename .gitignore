@@ -1,0 +1,9 @@
+# Los proyectos de repository/ tienen su propio git
+repository/*
+!repository/.gitkeep
+
+.env
+.env.*
+.DS_Store
+node_modules
+.claude/settings.local.json
