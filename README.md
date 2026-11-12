@@ -15,19 +15,21 @@ design-studio/
 
 ## Meter un proyecto en `repository/`
 
-Opción recomendada, un worktree del repo real (comparte historia, ramas aparte):
+Opción recomendada, un clon independiente (funciona igual en local y en la nube):
 
 ```bash
-cd ../SmartLot
-git worktree add ../design-studio/repository/SmartLot -b diseno/<tema>
+git clone <url> repository/SmartLot
+cd repository/SmartLot && git checkout -b diseno/<tema>
 ```
+
+Si dos proyectos se referencian entre sí (por ejemplo, un juego y su landing que comparten documentación), se clonan los dos en `repository/`, uno al lado del otro.
 
 Otras opciones:
 
-- Clon independiente: `git clone <url> repository/SmartLot`
+- Worktree del repo real, si ya lo tenés clonado y querés compartir historia: `git worktree add ../design-studio/repository/SmartLot -b diseno/<tema>` desde `../SmartLot`. Para sacarlo: `git worktree remove repository/SmartLot`, desde el repo original.
 - Sin copiar nada: abrir Claude en el hub con `claude --add-dir ../SmartLot` (en ese caso el proyecto no queda dentro de `repository/`).
 
-Para sacar un worktree cuando terminás: `git worktree remove repository/SmartLot`, desde el repo original.
+Los cambios de diseño grandes van en una rama `diseno/<tema>` del proyecto, nunca en `main`. El agente avisa antes de tocar archivos y solo commitea o pushea si se le pide.
 
 ## Uso
 
