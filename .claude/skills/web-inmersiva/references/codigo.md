@@ -14,13 +14,14 @@ El código vive en `templates/src/` como archivos reales. Se copia al proyecto y
 | `scroll/useStoryTimeline.ts` | El director: el único que escribe `rig`. Cámara en la entrada, `fx` en la estadía, saltos con reduced motion | 3 |
 | `state/store.ts` | zustand para lo discreto. `initialTier()` mira WebGL2, ahorro de datos, memoria y núcleos | 2 y 3 |
 | `three/Experience.tsx` | Canvas fijo, `PerformanceMonitor`, `FrameBridge`, fundido al primer frame, contexto perdido → `static`, efectos solo en el tier alto | 3 |
+| `three/Effects.tsx` | Posprocesado (Bloom, viñeta, tone mapping) en su propio chunk, solo tier "high". Va dentro de `<Canvas>` | 3 |
 | `three/CameraRig.tsx` | Lee `rig.cam` y amortigua con `damp3`. Con `rig.snap`, salta | 3 |
 | `three/InlineStage.tsx` | Canvas contenido: se monta cerca y se pausa fuera de pantalla | 2 |
 | `three/draco.ts` | `useModel` / `preloadModel` con el decodificador de Draco local | 2 y 3 |
 | `three/scenes/FlowAlong.tsx` | Partículas instanciadas sobre una curva, con `glow()` para el Bloom | 2 y 3 |
 | `three/scenes/RevealPlane.tsx` + `three/shaders/` | Shader propio manejado por `rig.fx.reveal` | 2 y 3 |
 | `ui/Section.tsx` | Sección sticky, SplitText, fundido corto con reduced motion, póster en la versión sin 3D. La primera sección lleva el `h1` | 1, 2 y 3 |
-| `App.tsx` | Capa DOM: `lazy(Experience)`, no la monta con `tier: "static"` ni con `no3d`, enlace para saltar al contenido | 3 |
+| `App.tsx` | Capa DOM: `lazy(Experience)`, no la monta con `tier: "static"`, con `no3d` ni antes de `initialized` (así el chunk no se pide), enlace para saltar al contenido | 3 |
 | `styles/structure.css` | `.stage` fijo con fundido, secciones por `--weight`, versión sin 3D, celular | 2 y 3 |
 
 ## Cómo se adapta

@@ -192,7 +192,7 @@ src/
   content/   site.ts (secciones) · sources.ts
   scroll/    smoothScroll.ts · useStoryTimeline.ts · rig.ts
   state/     store.ts
-  three/     Experience.tsx · CameraRig.tsx · InlineStage.tsx · draco.ts · palette.ts · scenes/*.tsx · shaders/
+  three/     Experience.tsx · Effects.tsx · CameraRig.tsx · InlineStage.tsx · draco.ts · palette.ts · scenes/*.tsx · shaders/
   ui/        Section.tsx · Nav.tsx · Cta.tsx
   styles/    tokens.css · base.css · structure.css
 public/      models/ (+ CREDITS.md) · posters/ · textures/ · draco/ · hdri/ · fonts/
@@ -297,6 +297,7 @@ El código de todo esto está en `templates/src/` y se explica en `references/co
   - `"high"` en el resto.
 - **Durante la visita:** `PerformanceMonitor` baja a `"low"` (DPR 1, sin postprocesado) cuando el FPS cae, y sube de nuevo cuando se recupera (`flipflops={3}`). Si se pierde el contexto WebGL, se pasa a `"static"`.
 - **`gl` se configura una sola vez:** el antialias es fijo (`true`) y no depende del tier. En el tier alto, el EffectComposer usa `multisampling={4}` solo con DPR 1.
+- **Descarga del 3D:** el chunk 3D se pide solo cuando `initialized` es verdadero (lo pone `initUIFromBrowser`) y el tier no es estático ni hay `?sin3d`. El postprocesado va en `three/Effects.tsx`, otro chunk, solo en tier alto.
 - **DPR:** como máximo 2.
 - **En `useFrame`:**
   - No se crean objetos de three ni se hace `setState`.

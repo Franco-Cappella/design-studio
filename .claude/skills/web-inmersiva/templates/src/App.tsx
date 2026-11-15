@@ -14,8 +14,11 @@ export default function App() {
   const main = useRef<HTMLElement>(null);
   const tier = useUI((s) => s.tier);
   const no3d = useUI((s) => s.no3d);
+  const initialized = useUI((s) => s.initialized);
   const toggleNo3d = useUI((s) => s.toggleNo3d);
-  const show3d = tier !== "static" && !no3d; // sin WebGL, ahorro de datos o contexto perdido → versión estática
+  // Antes de initialized no se monta el 3D: lazy() pide el chunk recién cuando se renderiza Experience.
+  // Sin WebGL, ahorro de datos, ?sin3d o contexto perdido → versión estática, y el chunk nunca se pide.
+  const show3d = initialized && tier !== "static" && !no3d;
 
   useEffect(() => { initUIFromBrowser(); return initSmoothScroll(); }, []);
   useStoryTimeline(main);
@@ -27,7 +30,8 @@ export default function App() {
       <header>
         <button type="button" onClick={toggleNo3d} aria-pressed={no3d}>Ver sin 3D</button>
       </header>
-      <main id="contenido" ref={main} data-no3d={!show3d}>
+      {/* Por defecto el layout es el de 3D. Pasa al layout sin 3D solo cuando ya se sabe que no hay 3D. */}
+      <main id="contenido" ref={main} data-no3d={initialized && !show3d}>
         {site.sections.map((s, i) => <Section key={s.id} s={s} i={i} />)}
       </main>
     </>

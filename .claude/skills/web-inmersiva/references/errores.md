@@ -29,3 +29,6 @@
 | Sin escuchar `webglcontextlost` | En celular el contexto se pierde y el canvas queda negro | Pasar a `tier: "static"` (ya está en `Experience.tsx`) |
 | Todo el motion adentro de `(prefers-reduced-motion: no-preference)` | Con reduced motion no queda ni el fundido corto que pide la regla | Rama `reduce` con un `autoAlpha` corto, sin desplazamiento |
 | El 3D aparece de golpe a mitad de la lectura | Salto visual cuando termina de cargar el chunk | `.stage` con opacidad 0 y fundido al primer frame (`FirstFrame`) |
+| Montar el 3D en el primer render y decidir tier y `?sin3d` en `useEffect` | El chunk 3D se pide en el primer render aunque después el tier sea estático o venga `?sin3d`. La descarga no se deshace | `initialized` en el store: `App` monta `Experience` solo después de `initUIFromBrowser()` |
+| Postprocesado importado de forma estática en `Experience.tsx` | La gama baja descarga y parsea unos 86 KB de posprocesado que no usa | `three/Effects.tsx` con `lazy()`, solo en tier "high" |
+| Layout sin 3D mientras no se sabe el tier | Salto de layout al inicializar en visitantes con 3D | `data-no3d={initialized && !show3d}`: el default es el layout con 3D |

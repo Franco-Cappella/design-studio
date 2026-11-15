@@ -4,12 +4,13 @@ export type Tier = "high" | "low" | "static";
 
 type UI = {
   section: number; tier: Tier; no3d: boolean; presenting: boolean;
+  initialized: boolean; // false hasta que corre initUIFromBrowser: App no monta el 3D antes
   setSection: (i: number) => void; setTier: (t: Tier) => void;
   toggleNo3d: () => void; togglePresenting: () => void;
 };
 
 export const useUI = create<UI>((set) => ({
-  section: 0, tier: "high", no3d: false, presenting: false,
+  section: 0, tier: "high", no3d: false, presenting: false, initialized: false,
   setSection: (section) => set({ section }),
   setTier: (tier) => set({ tier }),
   toggleNo3d: () => set((s) => ({ no3d: !s.no3d })),
@@ -32,7 +33,11 @@ export function initialTier(): Tier {
 }
 
 // Llamar UNA vez en un useEffect de App (seguro con SSR).
+// Hasta que corre, initialized es false y App no monta el 3D: así el chunk 3D no se pide
+// con tier estático ni con ?sin3d (antes se pedía en el primer render, aunque después no se usara).
 export function initUIFromBrowser() {
   const q = new URLSearchParams(location.search);
-  useUI.setState({ tier: initialTier(), no3d: q.has("sin3d"), presenting: q.has("presentacion") });
+  useUI.setState({
+    tier: initialTier(), no3d: q.has("sin3d"), presenting: q.has("presentacion"), initialized: true,
+  });
 }

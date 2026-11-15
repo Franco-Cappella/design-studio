@@ -1,13 +1,15 @@
 // Chunk 3D: se carga con lazy() (en Next/Astro, solo en el cliente).
-// App no lo monta si tier === "static" o no3d.
+// App no lo monta si tier === "static", no3d o todavía no se inicializó (initialized).
 import { PerformanceMonitor } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postprocessing";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { rig } from "../scroll/rig";
 import { useUI } from "../state/store";
 import { CameraRig } from "./CameraRig";
 import { palette } from "./palette";
+
+// Posprocesado en su propio chunk: solo en tier "high". En gama baja no se descarga ni se parsea.
+const Effects = lazy(() => import("./Effects"));
 
 // La capa DOM pide frames (reduced motion, "demand") sin importar R3F.
 function FrameBridge() {
@@ -30,18 +32,6 @@ function FirstFrame({ onReady }: { onReady: () => void }) {
   return null;
 }
 
-// Con DPR > 1 el multisampling cuesta mucho y casi no se nota: se usa solo en DPR 1.
-function Effects() {
-  const dpr = useThree((s) => s.viewport.dpr);
-  return (
-    <EffectComposer multisampling={dpr > 1 ? 0 : 4}>
-      <Bloom mipmapBlur luminanceThreshold={1} intensity={0.8} />
-      <Vignette darkness={0.4} offset={0.3} />
-      <ToneMapping />
-    </EffectComposer>
-  );
-}
-
 export default function Experience() {
   const tier = useUI((s) => s.tier);
   const setTier = useUI((s) => s.setTier);
@@ -55,7 +45,7 @@ export default function Experience() {
         frameloop={reduce ? "demand" : "always"}
         camera={{ fov: 40, near: 0.1, far: 100 }}
         // `gl` se lee una sola vez, al crear el contexto: no depende del tier.
-        // El antialias nativo cubre el tier bajo; en el alto, el EffectComposer usa multisampling.
+        // El antialias nativo cubre el tier bajo; en el alto, Effects usa multisampling solo con DPR 1.
         gl={{ antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
           // En celular el contexto WebGL se puede perder: se pasa a la versión estática.
@@ -73,7 +63,7 @@ export default function Experience() {
         </Suspense>
         <CameraRig />
         <FrameBridge />
-        {tier === "high" && <Effects />}
+        {tier === "high" && <Suspense fallback={null}><Effects /></Suspense>}
       </Canvas>
     </div>
   );

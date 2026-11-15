@@ -114,8 +114,8 @@
       "sourceType": "own",
       "commit": null,
       "syncedAt": "2026-11-15",
-      "sha256": "3751ab9b2d7fb2c35b458f92f812a2d558b167b7eb608439c6fedec8b418b5de",
-      "notes": "Skill propia. Origen: perfil de claude.ai. Código en templates/src (tsc strict y vite build verificados), detalle en references/, evals en evals/."
+      "sha256": "78ab2036fd58cb38e9d843822cc61e1916bbf8c67612f5eb190b3278d438371a",
+      "notes": "Skill propia. Origen: perfil de claude.ai. Código en templates/src (tsc strict y vite build verificados), detalle en references/, evals en evals/. Fix 2026-11-15: initialized (descarga 3D) y Effects.tsx en templates/src."
     }
   }
 }

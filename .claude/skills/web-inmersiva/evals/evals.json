@@ -1,20 +1,22 @@
 {
   "skill_name": "web-inmersiva",
-  "how_to_run": "Cada eval se le da a un agente nuevo con la skill y a otro sin ella (línea de base). Se construye el sitio, se corre npm run build y se recorre con el navegador en 390x844 y 1440x900, con y sin reduced motion. Un juez que no sabe cuál es cuál revisa expected_output punto por punto y anota los chunks gzip de cada build.",
+  "how_to_run": "Cada eval se le da a un agente nuevo con la skill y a otro sin ella (línea de base). Se construye el sitio, se corre npm run build y se recorre con el navegador en 390x844 y 1440x900, con y sin reduced motion. Un juez que no sabe cuál es cuál revisa expected_output (o expected_contract y expected_build) punto por punto y anota los chunks gzip de cada build. Los evals 1 y 2 se separan en expected_contract (antes del checkpoint de dirección) y expected_build (después de una elección de estudio declarada en el prompt y marcada como simulada). Los demás usan expected_output.",
   "evals": [
     {
       "id": 1,
       "name": "producto-con-objeto",
       "prompt": "Hacé una landing para Brisa, un ventilador de techo silencioso con aspas de madera. Tengo el modelo 3D en public/models/brisa.glb. Datos reales: 22 dB a velocidad máxima, 5 velocidades, garantía de 10 años. Quiero que se sienta premium y que el ventilador sea protagonista. Vite + React.",
-      "expected_output": "Elige el nivel 2 y lo justifica en una línea. Pregunta lo que falta del brief en una sola tanda (CTA, dónde se va a ver). Título, subtítulo y CTA del hero en HTML desde el primer render. El modelo se carga con useGLTF y el decodificador de Draco local (public/draco/), sin CDN. El canvas está contenido en su sección, se monta cerca y se pausa fuera de pantalla. Chunk DOM ≤ 150 KB gzip. No inventa testimonios ni métricas además de las tres dadas. Funciona con ?sin3d y con reduced motion (fundido corto, sin texto partido).",
-      "files": []
+      "files": [],
+      "expected_contract": "Elige el nivel 2 y lo justifica en una línea (la landing de producto con un objeto es el default de la skill). Hace el brief y el contrato de dirección: 3 estudios distintos. Pregunta lo que falta en una sola tanda (CTA, dónde se va a ver). Se detiene en el checkpoint de elección del estudio. No inventa testimonios ni métricas además de las tres dadas.",
+      "expected_build": "Solo se juzga después de la elección del estudio (si no es real, se declara como simulada en el prompt). Título, subtítulo y CTA del hero en HTML desde el primer render. El modelo se carga con useModel() (decodificador de Draco local en public/draco/, sin CDN). El canvas está contenido en su sección, se monta cerca y se pausa fuera de pantalla. Chunk DOM ≤ 150 KB gzip. Con ?sin3d no se descarga el chunk 3D. Reduced motion: fundido corto, sin texto partido."
     },
     {
       "id": 2,
       "name": "relato-de-datos",
       "prompt": "Necesito un scrollytelling sobre cómo bajó el consumo de agua en Rosario entre 2015 y 2025. Te paso la tabla: 2015 312 L/persona/día, 2018 290, 2021 268, 2025 241. Fuente: Aguas Santafesinas, informe anual 2025. Que sea inmersivo.",
-      "expected_output": "Elige el nivel 1 (la historia es de números) y no agrega WebGL. Mapa de 5 a 8 secciones con un verbo de movimiento por sección. Gráficos en SVG con <title> y una tabla equivalente. Cifras con tabular-nums y la fuente citada. Lenis movido por gsap.ticker, sin requestAnimationFrame propio. Scroll reversible: al volver hacia arriba cada sección restaura su estado.",
-      "files": []
+      "files": [],
+      "expected_contract": "Elige el nivel 1 (una historia de cifras no necesita 3D) y lo justifica. Hace el mapa de 5 a 8 secciones con un verbo de movimiento por sección. Cita la fuente de las cifras y no agrega cifras que no estén en el encargo; si la fuente no se puede verificar, lo anota como pendiente. Hace el contrato de dirección con 3 estudios y se detiene en el checkpoint de elección.",
+      "expected_build": "Solo se juzga después de la elección del estudio (si no es real, se declara como simulada en el prompt). Gráficos en SVG con <title> y una tabla equivalente. Cifras con tabular-nums. Lenis movido por gsap.ticker, sin requestAnimationFrame propio. Scroll reversible: al volver hacia arriba cada sección restaura su estado. Sin WebGL."
     },
     {
       "id": 3,
