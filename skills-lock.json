@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "skills": {
+    "a11y-debugging": {
+      "source": "ChromeDevTools/chrome-devtools-mcp",
+      "sourceType": "github",
+      "skillPath": "skills/a11y-debugging",
+      "commit": "8ba2ac945ebaf1adb92208c29f3a30e73a920956",
+      "syncedAt": "2026-11-14",
+      "sha256": "e6e1620e4c1d54bef04c3de1bdabb327602b62b7b3db703557865eac84b871b1",
+      "notes": "Requiere el MCP chrome-devtools (.mcp.json)."
+    },
+    "brandkit": {
+      "source": "Leonxlnx/imagegen-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brandkit",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "cfa1a800ef2e7a60d04b232b0195e11beef5c6801127665514cbbd8652f27b83"
+    },
+    "context-engineering": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/context-engineering",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "af4e32d048861e0670e2fb5405dcf9824646bf25ad83db073186e087e36aa510"
+    },
+    "debug-optimize-lcp": {
+      "source": "ChromeDevTools/chrome-devtools-mcp",
+      "sourceType": "github",
+      "skillPath": "skills/debug-optimize-lcp",
+      "commit": "8ba2ac945ebaf1adb92208c29f3a30e73a920956",
+      "syncedAt": "2026-11-14",
+      "sha256": "d6486b728d7c891ed67280d05880dc396499242b02f3041d9e62c8e83c1ba5f3",
+      "notes": "Requiere el MCP chrome-devtools (.mcp.json)."
+    },
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "a2adda18568ae014f602e42b0727fb2e4b852f109d722b9f1e3067069d5c46ea"
+    },
+    "documentation-and-adrs": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/documentation-and-adrs",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "d14894e086868978115503b70a11426037bbbcfd6326e3a0776d8ad10ff0e708"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng",
+      "commit": "0f2e23b32bb1265e84cff8d3e75785fec953fb1b",
+      "syncedAt": "2026-11-14",
+      "sha256": "9b54d1a70cae6b69c36d7f125a908451b2767706ab6e41a4c575316aff9e9bac"
+    },
+    "imagegen-frontend-web": {
+      "source": "Leonxlnx/imagegen-skills",
+      "sourceType": "github",
+      "skillPath": "skills/imagegen-frontend-web",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "23e6d27ab410e97fe5e844d18db97c8e674d317abd8567f4c7726ee16f56da6e"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "a2ba4387401c11dc28fd58d4962df1a8dd39d5c3b1fdca45549171c6c26d6e4e",
+      "notes": "v4.8.0. El binario de scripts/bin/ no se versiona: el wrapper lo baja y verifica."
+    },
+    "review-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/review-animations",
+      "commit": "0f2e23b32bb1265e84cff8d3e75785fec953fb1b",
+      "syncedAt": "2026-11-14",
+      "sha256": "652fc8e85e4829b9f86049e54a90247fc214341d7298a92f61668474fde6474b",
+      "notes": "Se quitó disable-model-invocation para que design-director pueda cargarla."
+    },
+    "spec-driven-development": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/spec-driven-development",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "38d8d26fb9bd0d13b3050ed1d7d35774ff73466cbb3227c27b6a29bdcb5a87de"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max",
+      "commit": "d643997c82e94742dd3bee43210b0198e8bbba3d",
+      "syncedAt": "2026-11-14",
+      "sha256": "6021405164d0cd04a95b5417c5a117d81b6f150858eec87d591b01a35e65731f",
+      "notes": "Rutas de search.py relativas a la raíz del hub en lugar de ${CLAUDE_PLUGIN_ROOT}. Sin scripts/tests."
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "3286ace648b4d740317b9c1cb7fbd38600eaacc62a8b57ea5e06fd2992b5582e"
+    },
+    "web-inmersiva": {
+      "sourceType": "own",
+      "commit": null,
+      "syncedAt": null,
+      "sha256": "673ff50e362018e07d5c654a0e54e758d1372068afd2c5a5a23e20d2c8c624e1",
+      "notes": "Skill propia. Origen: perfil de claude.ai."
+    }
+  }
+}

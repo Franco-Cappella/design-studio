@@ -9,7 +9,7 @@ Esta skill sirve para construir sitios donde el scroll y el movimiento cuentan a
 
 **Precedencia (de mayor a menor):**
 1. Lo que pida el usuario en ese momento.
-2. Una skill específica del proyecto, si existe (por ejemplo `tesina-itot-web-inmersiva`).
+2. Las reglas del proyecto (`AGENTS.md`, `DESIGN.md`) y una skill específica del proyecto, si existe.
 3. Las decisiones que ya tenga el repositorio (framework, estilos, librerías).
 4. Esta skill.
 
@@ -740,6 +740,8 @@ El salto entre secciones del modo presentación es narrativo (hasta 1.2 s). La t
 - [ ] Si se va a presentar en vivo: un ensayo en la máquina y la pantalla reales, la versión sin 3D como respaldo y un video del recorrido.
 
 ## 17. Skills de referencia (consultar sin contradecir esta)
+
+En el hub `design-studio` está instalada `review-animations`, para revisar el motion al cerrar. Las demás no están instaladas: si hace falta, se consultan en su repo.
 
 | Skill | Para qué consultarla |
 |---|---|

@@ -7,3 +7,6 @@ repository/*
 .DS_Store
 node_modules
 .claude/settings.local.json
+
+# Binario del motor de impeccable: el wrapper lo baja y verifica por checksum si falta
+.claude/skills/impeccable/scripts/bin/
