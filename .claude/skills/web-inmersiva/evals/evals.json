@@ -1,0 +1,41 @@
+{
+  "skill_name": "web-inmersiva",
+  "how_to_run": "Cada eval se le da a un agente nuevo con la skill y a otro sin ella (línea de base). Se construye el sitio, se corre npm run build y se recorre con el navegador en 390x844 y 1440x900, con y sin reduced motion. Un juez que no sabe cuál es cuál revisa expected_output punto por punto y anota los chunks gzip de cada build.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "producto-con-objeto",
+      "prompt": "Hacé una landing para Brisa, un ventilador de techo silencioso con aspas de madera. Tengo el modelo 3D en public/models/brisa.glb. Datos reales: 22 dB a velocidad máxima, 5 velocidades, garantía de 10 años. Quiero que se sienta premium y que el ventilador sea protagonista. Vite + React.",
+      "expected_output": "Elige el nivel 2 y lo justifica en una línea. Pregunta lo que falta del brief en una sola tanda (CTA, dónde se va a ver). Título, subtítulo y CTA del hero en HTML desde el primer render. El modelo se carga con useGLTF y el decodificador de Draco local (public/draco/), sin CDN. El canvas está contenido en su sección, se monta cerca y se pausa fuera de pantalla. Chunk DOM ≤ 150 KB gzip. No inventa testimonios ni métricas además de las tres dadas. Funciona con ?sin3d y con reduced motion (fundido corto, sin texto partido).",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "relato-de-datos",
+      "prompt": "Necesito un scrollytelling sobre cómo bajó el consumo de agua en Rosario entre 2015 y 2025. Te paso la tabla: 2015 312 L/persona/día, 2018 290, 2021 268, 2025 241. Fuente: Aguas Santafesinas, informe anual 2025. Que sea inmersivo.",
+      "expected_output": "Elige el nivel 1 (la historia es de números) y no agrega WebGL. Mapa de 5 a 8 secciones con un verbo de movimiento por sección. Gráficos en SVG con <title> y una tabla equivalente. Cifras con tabular-nums y la fuente citada. Lenis movido por gsap.ticker, sin requestAnimationFrame propio. Scroll reversible: al volver hacia arriba cada sección restaura su estado.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "mundo-de-scroll",
+      "prompt": "Quiero un portfolio donde el visitante recorra mi taller de luthería como un espacio 3D: el banco de trabajo, las maderas, las herramientas, las guitarras terminadas, y al final el contacto. Hacelo con R3F.",
+      "expected_output": "Elige el nivel 3 con canvas fijo, director de scroll (useStoryTimeline) y rig. Hace la biblia de estilo y 3 estudios de dirección distintos y espera la elección antes del código de escenas. Cada sección tiene camera y cameraPortrait. La capa DOM no importa three (chunk DOM ≤ 150 KB gzip). El .stage entra con un fundido. Sin OrbitControls ni helpers en producción. Sin <Environment preset>. La CTA de contacto funciona sin 3D.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "dashboard-fuera-de-alcance",
+      "prompt": "Armame un dashboard de ventas con gráficos animados y una tabla de pedidos.",
+      "expected_output": "La skill no se activa o, si se activa, dice que no es su alcance (dashboards y pantallas de app) y deriva a la skill de interfaces de app. No propone R3F, Lenis ni scroll narrativo.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "celular-modesto",
+      "prompt": "La landing 3D que hicimos anda mal en un celular gama baja: se traba, a veces queda la pantalla negra y la cámara salta cuando aparece la barra del navegador. Arreglalo.",
+      "expected_output": "Revisa los tiers: initialTier arranca en low o static según memoria, núcleos y ahorro de datos; PerformanceMonitor baja a low. Agrega o confirma el manejo de webglcontextlost que pasa a static. Configura ScrollTrigger.config({ ignoreMobileResize: true }). No cambia gl.antialias por tier. Verifica en 390x844 con scroll hacia adelante y hacia atrás.",
+      "files": []
+    }
+  ]
+}

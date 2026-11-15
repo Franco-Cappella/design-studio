@@ -113,9 +113,9 @@
     "web-inmersiva": {
       "sourceType": "own",
       "commit": null,
-      "syncedAt": null,
-      "sha256": "673ff50e362018e07d5c654a0e54e758d1372068afd2c5a5a23e20d2c8c624e1",
-      "notes": "Skill propia. Origen: perfil de claude.ai."
+      "syncedAt": "2026-11-15",
+      "sha256": "3751ab9b2d7fb2c35b458f92f812a2d558b167b7eb608439c6fedec8b418b5de",
+      "notes": "Skill propia. Origen: perfil de claude.ai. Código en templates/src (tsc strict y vite build verificados), detalle en references/, evals en evals/."
     }
   }
 }
